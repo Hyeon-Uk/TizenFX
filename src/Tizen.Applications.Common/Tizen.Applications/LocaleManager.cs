@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Tizen.Applications
@@ -52,7 +53,9 @@ namespace Tizen.Applications
 
         public static CultureInfo GetApplicationLocale()
         {
-            return null;
+            string locale = ULocale.GetDefaultLocale();
+
+            return ConvertCultureInfo(locale);
         }
 
         public static CultureInfo GetSystemLocale()
