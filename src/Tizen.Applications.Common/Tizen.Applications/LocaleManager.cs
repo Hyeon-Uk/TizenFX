@@ -127,5 +127,111 @@ namespace Tizen.Applications
                 .Where(formattedLocale => formattedLocale != null)
                 .ToHashSet();
         }
+
+        internal class ULocale
+        {
+            private const int ULOC_FULLNAME_CAPACITY = 157;
+            private const int ULOC_LANG_CAPACITY = 12;
+            private const int ULOC_SCRIPT_CAPACITY = 6;
+            private const int ULOC_COUNTRY_CAPACITY = 4;
+            private const int ULOC_VARIANT_CAPACITY = ULOC_FULLNAME_CAPACITY;
+
+            internal ULocale(string locale)
+            {
+                Locale = Canonicalize(locale);
+                Language = GetLanguage(Locale);
+                Script = GetScript(Locale);
+                Country = GetCountry(Locale);
+                Variant = GetVariant(Locale);
+                LCID = GetLCID(Locale);
+            }
+
+            internal string Locale { get; private set; }
+            internal string Language { get; private set; }
+            internal string Script { get; private set; }
+            internal string Country { get; private set; }
+            internal string Variant { get; private set; }
+            internal int LCID { get; private set; }
+
+            private string Canonicalize(string localeName)
+            {
+                // Get the locale name from ICU
+                StringBuilder sb = new StringBuilder(ULOC_FULLNAME_CAPACITY);
+                if (Interop.BaseUtilsi18n.Canonicalize(localeName, sb, sb.Capacity) <= 0)
+                {
+                    return null;
+                }
+
+                return sb.ToString();
+            }
+
+            private string GetLanguage(string locale)
+            {
+                // Get the language name from ICU
+                StringBuilder sb = new StringBuilder(ULOC_LANG_CAPACITY);
+                if (Interop.BaseUtilsi18n.GetLanguage(locale, sb, sb.Capacity, out int bufSizeLanguage) != 0)
+                {
+                    return null;
+                }
+
+                return sb.ToString();
+            }
+
+            private string GetScript(string locale)
+            {
+                // Get the script name from ICU
+                StringBuilder sb = new StringBuilder(ULOC_SCRIPT_CAPACITY);
+                if (Interop.BaseUtilsi18n.GetScript(locale, sb, sb.Capacity) <= 0)
+                {
+                    return null;
+                }
+
+                return sb.ToString();
+            }
+
+            private string GetCountry(string locale)
+            {
+                int err = 0;
+
+                // Get the country name from ICU
+                StringBuilder sb = new StringBuilder(ULOC_COUNTRY_CAPACITY);
+                if (Interop.BaseUtilsi18n.GetCountry(locale, sb, sb.Capacity, out err) <= 0)
+                {
+                    return null;
+                }
+
+                return sb.ToString();
+            }
+
+            private string GetVariant(string locale)
+            {
+                // Get the variant name from ICU
+                StringBuilder sb = new StringBuilder(ULOC_VARIANT_CAPACITY);
+                if (Interop.BaseUtilsi18n.GetVariant(locale, sb, sb.Capacity) <= 0)
+                {
+                    return null;
+                }
+
+                return sb.ToString();
+            }
+
+            private int GetLCID(string locale)
+            {
+                // Get the LCID from ICU
+                uint lcid = Interop.BaseUtilsi18n.GetLCID(locale);
+                return (int)lcid;
+            }
+
+            internal static string GetDefaultLocale()
+            {
+                IntPtr stringPtr = Interop.Libc.GetEnvironmentVariable("LANG");
+                if (stringPtr == IntPtr.Zero)
+                {
+                    return string.Empty;
+                }
+
+                return Marshal.PtrToStringAnsi(stringPtr);
+            }
+        }
     }
 }
