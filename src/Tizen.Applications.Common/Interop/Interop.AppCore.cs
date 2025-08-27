@@ -21,8 +21,16 @@ internal static partial class Interop
 {
     internal static partial class AppCore
     {
-        [DllImport(Libraries.AppCommon, EntryPoint = "app_core_base_language_update")]
-        internal static extern void UpdateLanguage(string lang);
-        // void app_core_base_language_update(const char* lang);
+        [DllImport(Libraries.AppCommon, EntryPoint = "app_locale_manager_set_language")]
+        internal static extern int AppLocaleManagerSetLanguage(string lang);
+        // int app_locale_manager_set_language(const char* lang)
+
+        [DllImport(Libraries.AppCommon, EntryPoint = "app_locale_manager_get_language")]
+        internal static extern int AppLocaleManagerGetLanguage(out IntPtr langPtr);
+        // int app_locale_manager_get_language(const char** lang)
+
+        [DllImport(Libraries.AppCommon, EntryPoint = "app_locale_manager_get_system_language")]
+        internal static extern int AppLocaleManagerGetSystemLanguage(out IntPtr langPtr);
+        // int app_locale_manager_get_system_language(const char** lang)
     }
 }
