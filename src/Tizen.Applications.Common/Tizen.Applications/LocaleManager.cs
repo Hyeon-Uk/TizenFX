@@ -43,7 +43,8 @@ namespace Tizen.Applications
 
             if (VerifySupportedLocale(convertedLocale))
             {
-                Interop.AppCore.UpdateLanguage(convertedLocale);
+                Interop.AppCore.AppLocaleManagerSetLanguage(convertedLocale);
+                SetCurrentUICultureInfo(convertedLocale);
             }
             else
             {
@@ -53,15 +54,64 @@ namespace Tizen.Applications
 
         public static CultureInfo GetApplicationLocale()
         {
-            string locale = ULocale.GetDefaultLocale();
+            IntPtr lang = IntPtr.Zero;
 
-            return ConvertCultureInfo(locale);
+            int result = Interop.AppCore.AppLocaleManagerGetLanguage(out lang);
+
+            if (result != 0 || lang == IntPtr.Zero)
+            {
+                Log.Error(LogTag, $"");
+                return null;
+            }
+
+            string language = Marshal.PtrToStringUTF8(lang);
+
+            return ConvertCultureInfo(language);
         }
 
-        public static CultureInfo GetSystemLocale()
+        public static string GetSystemLocale()
         {
-            return null;
+            IntPtr lang = IntPtr.Zero;
+
+            int result = Interop.AppCore.AppLocaleManagerGetSystemLanguage(out lang);
+
+            if (result != 0 || lang == IntPtr.Zero)
+            {
+                Log.Error(LogTag, $"");
+                return null;
+            }
+
+            string language = Marshal.PtrToStringUTF8(lang);
+
+            return language;
         }
+
+        internal static void SetCurrentCultureInfo(string locale)
+        {
+            CultureInfo cultureInfo = ConvertCultureInfo(locale);
+            if (cultureInfo != null)
+            {
+                CultureInfo.CurrentCulture = cultureInfo;
+            }
+            else
+            {
+                Log.Error(LogTag, "CultureInfo is null. locale: " + locale);
+            }
+        }
+
+        internal static void SetCurrentUICultureInfo(string locale)
+        {
+            CultureInfo cultureInfo = ConvertCultureInfo(locale);
+            if (cultureInfo != null)
+            {
+                CultureInfo.CurrentUICulture = cultureInfo;
+            }
+            else
+            {
+                Log.Error(LogTag, "CultureInfo is null. locale: " + locale);
+            }
+        }
+
         private static CultureInfo ConvertCultureInfo(string locale)
         {
             ULocale pLocale = new ULocale(locale);
