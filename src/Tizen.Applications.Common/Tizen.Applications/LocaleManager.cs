@@ -59,6 +59,115 @@ namespace Tizen.Applications
         {
             return null;
         }
+        private static CultureInfo ConvertCultureInfo(string locale)
+        {
+            ULocale pLocale = new ULocale(locale);
+            string cultureName = CultureInfoHelper.GetCultureName(pLocale.Locale.Replace("_", "-"));
+
+            if (!string.IsNullOrEmpty(cultureName))
+            {
+                try
+                {
+                    return new CultureInfo(cultureName);
+                }
+                catch (CultureNotFoundException)
+                {
+                    Log.Error(LogTag, "CultureNotFoundException occurs. CultureName: " + cultureName);
+                }
+            }
+
+            try
+            {
+                return new CultureInfo(pLocale.LCID);
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                return GetFallbackCultureInfo(pLocale);
+            }
+            catch (CultureNotFoundException)
+            {
+                return GetFallbackCultureInfo(pLocale);
+            }
+        }
+        private static bool ExistCultureInfo(string locale)
+        {
+            foreach (var cultureInfo in CultureInfo.GetCultures(CultureTypes.AllCultures))
+            {
+                if (cultureInfo.Name == locale)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static CultureInfo GetCultureInfo(string locale)
+        {
+            if (!ExistCultureInfo(locale))
+            {
+                return null;
+            }
+
+            try
+            {
+                return new CultureInfo(locale);
+            }
+            catch (CultureNotFoundException)
+            {
+                return null;
+            }
+        }
+
+        private static CultureInfo GetFallbackCultureInfo(ULocale uLocale)
+        {
+            CultureInfo fallbackCultureInfo = null;
+            string locale = string.Empty;
+
+            if (uLocale.Locale != null)
+            {
+                locale = uLocale.Locale.Replace("_", "-");
+                fallbackCultureInfo = GetCultureInfo(locale);
+            }
+
+            if (fallbackCultureInfo == null && uLocale.Language != null && uLocale.Script != null && uLocale.Country != null)
+            {
+                locale = uLocale.Language + "-" + uLocale.Script + "-" + uLocale.Country;
+                fallbackCultureInfo = GetCultureInfo(locale);
+            }
+
+            if (fallbackCultureInfo == null && uLocale.Language != null && uLocale.Script != null)
+            {
+                locale = uLocale.Language + "-" + uLocale.Script;
+                fallbackCultureInfo = GetCultureInfo(locale);
+            }
+
+            if (fallbackCultureInfo == null && uLocale.Language != null && uLocale.Country != null)
+            {
+                locale = uLocale.Language + "-" + uLocale.Country;
+                fallbackCultureInfo = GetCultureInfo(locale);
+            }
+
+            if (fallbackCultureInfo == null && uLocale.Language != null)
+            {
+                locale = uLocale.Language;
+                fallbackCultureInfo = GetCultureInfo(locale);
+            }
+
+            if (fallbackCultureInfo == null)
+            {
+                try
+                {
+                    fallbackCultureInfo = new CultureInfo("en");
+                }
+                catch (CultureNotFoundException e)
+                {
+                    Log.Error(LogTag, "Failed to create CultureInfo. err = " + e.Message);
+                }
+            }
+
+            return fallbackCultureInfo;
+        }
 
         private static string ConvertCultureInfo(CultureInfo info)
         {
