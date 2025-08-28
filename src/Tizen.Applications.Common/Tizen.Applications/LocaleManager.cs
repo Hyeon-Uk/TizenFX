@@ -80,9 +80,7 @@ namespace Tizen.Applications
                 Log.Error(LogTag, $"");
                 return null;
             }
-
-            string language = Marshal.PtrToStringUTF8(lang);
-
+            string language = Marshal.PtrToStringAnsi(lang);
             return language;
         }
 
@@ -224,7 +222,7 @@ namespace Tizen.Applications
 
         private static string ConvertCultureInfo(CultureInfo info)
         {
-            return $"{info.Name}.{Encoding.UTF8.BodyName}";
+            return $"{info.Name.Replace("-","_")}.UTF-8";
         }
 
         private static bool VerifySupportedLocale(string locale)
