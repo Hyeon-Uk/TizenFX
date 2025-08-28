@@ -399,6 +399,11 @@ namespace Tizen.Applications
             }
             base.Dispose(disposing);
         }
+
+        public static void SetApplicationLanguage(CultureInfo cultureInfo)
+        {
+            LocaleManager.SetApplicationLocale(cultureInfo);
+        }
     }
 
     internal static class GlobalizationMode
