@@ -45,6 +45,7 @@ namespace Tizen.NUI
         public NUIGadget(NUIGadgetType type)
         {
             Type = type;
+            OneShotService = ServiceFactory.CreateService();
             State = NUIGadgetLifecycleState.Initialized;
             Log.Info("Type=" + Type + ", State=" + State);
         }
@@ -125,11 +126,19 @@ namespace Tizen.NUI
             get;
         }
 
+        public OneShotService OneShotService
+        {
+            internal set;
+            get;
+        }
+
         internal void PreCreate()
         {
             if (State == NUIGadgetLifecycleState.Initialized)
             {
                 OnPreCreate();
+                // Run the OneShotService asynchronously without waiting for it to complete.
+                OneShotService.Run();
             }
         }
 
