@@ -513,6 +513,7 @@ namespace Tizen.Applications
         /// Gets the absolute path of the common shared data directory for this Team member.
         /// </summary>
         /// <value>The common shared data directory path.</value>
+        /// This will be public opened in next tizen after ACR done. (Before ACR, need to be hidden as inhouse API)
         [EditorBrowsable(EditorBrowsableState.Never)]
         public string CommonSharedDataPath
         {
@@ -535,6 +536,7 @@ namespace Tizen.Applications
         /// Gets the absolute path of the common shared trusted directory for this Team member.
         /// </summary>
         /// <value>The common shared trusted directory path.</value>
+        /// This will be public opened in next tizen after ACR done. (Before ACR, need to be hidden as inhouse API)
         [EditorBrowsable(EditorBrowsableState.Never)]
         public string CommonSharedTrustedPath
         {

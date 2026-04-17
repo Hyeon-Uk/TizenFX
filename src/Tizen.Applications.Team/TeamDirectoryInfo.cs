@@ -312,6 +312,7 @@ namespace Tizen.Applications
         /// <exception cref="OutOfMemoryException">Thrown when the system runs out of memory.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the team member context is invalid or the path cannot be retrieved.</exception>
         /// <exception cref="DirectoryNotFoundException">Thrown when the Team member is not found.</exception>
+        /// This will be public opened in next tizen after ACR done. (Before ACR, need to be hidden as inhouse API)
         [EditorBrowsable(EditorBrowsableState.Never)]
         public string CommonData
         {
@@ -336,6 +337,7 @@ namespace Tizen.Applications
         /// <exception cref="OutOfMemoryException">Thrown when the system runs out of memory.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the team member context is invalid or the path cannot be retrieved.</exception>
         /// <exception cref="DirectoryNotFoundException">Thrown when the Team member is not found.</exception>
+        /// This will be public opened in next tizen after ACR done. (Before ACR, need to be hidden as inhouse API)
         [EditorBrowsable(EditorBrowsableState.Never)]
         public string CommonCache
         {
@@ -360,6 +362,7 @@ namespace Tizen.Applications
         /// <exception cref="OutOfMemoryException">Thrown when the system runs out of memory.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the team member context is invalid or the path cannot be retrieved.</exception>
         /// <exception cref="DirectoryNotFoundException">Thrown when the Team member is not found.</exception>
+        /// This will be public opened in next tizen after ACR done. (Before ACR, need to be hidden as inhouse API)
         [EditorBrowsable(EditorBrowsableState.Never)]
         public string CommonSharedData
         {
@@ -384,6 +387,7 @@ namespace Tizen.Applications
         /// <exception cref="OutOfMemoryException">Thrown when the system runs out of memory.</exception>
         /// <exception cref="InvalidOperationException">Thrown when the team member context is invalid or the path cannot be retrieved.</exception>
         /// <exception cref="DirectoryNotFoundException">Thrown when the Team member is not found.</exception>
+        /// This will be public opened in next tizen after ACR done. (Before ACR, need to be hidden as inhouse API)
         [EditorBrowsable(EditorBrowsableState.Never)]
         public string CommonSharedTrusted
         {
